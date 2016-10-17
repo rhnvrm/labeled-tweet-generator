@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Kayako</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/paper/bootstrap.min.css" rel="stylesheet" integrity="sha384-awusxf8AUojygHf2+joICySzB780jVvQaVCAt1clU3QsyAitLGul28Qxb2r1e5g+" crossorigin="anonymous">
+
+</head>
+<body>
+	<div class='container-fluid'>
+	<h1>Customer Service Tweets</h1>
+	<div id="count">Loading...</div>
+	<div id="tweets"></div>
+	</div>
+	<script type="text/javascript">
+		$.ajax({
+		    url: 'tweets',
+		    data: {'only_retweets': 'true'},
+		    dataType: 'json',
+		    type: 'GET',
+		    success: function(data) {
+		        var tweets = data['data'];
+		        var container = $('#tweets');
+		        var contents = '';
+		        for(i = 0; i < tweets.length; i++)
+		        	contents += '<p>' + tweets[i].text + '</p>';
+		        container.html(contents);
+		        $('#count').html(data['count'] + " Tweets loaded.");
+		    }
+		});
+
+	</script>
+</body>
+</html>

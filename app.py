@@ -2,10 +2,11 @@
 import os
 from flask import Flask, request, render_template, jsonify
 from twitter import TwitterClient
+import distutils
 
 app = Flask(__name__)
-# Setup the client <query string, only_retweets bool>
-api = TwitterClient('@Sirajology', False)
+# Setup the client <query string, retweets_only bool, with_sentiment bool>
+api = TwitterClient('@Sirajology')
 
 
 @app.route('/')
@@ -16,14 +17,15 @@ def index():
 
 @app.route('/tweets')
 def tweets():
-        only_retweets = request.args.get('only_retweets')
-        if(only_retweets == 'false'):
-            api.set_retweet_checking(False)
-        else:
-            api.set_retweet_checking(True)
+        retweets_only = request.args.get('retweets_only')
+        api.set_retweet_checking(distutils.util.strtobool(retweets_only.lower()))
+        with_sentiment = request.args.get('with_sentiment')
+        api.set_with_sentiment(distutils.util.strtobool(with_sentiment.lower()))
+        query = request.args.get('query')
+        api.set_query(query)
+
         tweets = api.get_tweets()
-        return jsonify({'data': [{'text': t.text, 'name': t.user.screen_name}
-                        for t in tweets], 'count': len(tweets)})
+        return jsonify({'data': tweets, 'count': len(tweets)})
 
 
 port = int(os.environ.get('PORT', 5000))

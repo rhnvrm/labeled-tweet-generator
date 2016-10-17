@@ -10,25 +10,64 @@
 </head>
 <body>
 	<div class='container-fluid'>
-	<h1>Customer Service Tweets</h1>
-	<div id="count">Loading...</div>
-	<div id="tweets"></div>
+		<h1>Tweet Sentiment</h1>
+
+		<div id="search_box" class="container-fluid">
+			<input type="text" id="query">
+			<button id="search">Search</button>
+			<div id="loading">Loading...</div>
+			<div id="tweets"></div>
+		</div>	
+
 	</div>
 	<script type="text/javascript">
-		$.ajax({
-		    url: 'tweets',
-		    data: {'only_retweets': 'true'},
-		    dataType: 'json',
-		    type: 'GET',
-		    success: function(data) {
-		        var tweets = data['data'];
-		        var container = $('#tweets');
-		        var contents = '';
-		        for(i = 0; i < tweets.length; i++)
-		        	contents += '<p>' + tweets[i].text + '</p>';
-		        container.html(contents);
-		        $('#count').html(data['count'] + " Tweets loaded.");
-		    }
+
+		function sentiment_to_color(sentiment){
+			if(sentiment == 'positive') return 'green';
+			else if(sentiment == 'negative') return 'red';
+			else return 'grey';
+		}
+
+		function load_tweets(querystring){
+			$.ajax({
+			    url: 'tweets',
+			    data: {'query': querystring, 'retweets_only': 'false', 'with_sentiment': 'true'},
+			    dataType: 'json',
+			    type: 'GET',
+			    success: function(data) {
+			    		console.log(data);
+			        var tweets = data['data'];
+			        var container = $('#tweets');
+			        var contents = '';
+			        for(i = 0; i < tweets.length; i++)
+			        	contents += '<p style="color:'+ sentiment_to_color(tweets[i].sentiment) +'">' + tweets[i].text + '</p>';
+			        container.html(contents);
+			        $('#query').val(querystring);
+			        $('#loading').html(data['count'] + " Tweets loaded about "+ querystring +".");
+			    }
+			});
+		}
+
+		function get_csv(json){
+			var fields = Object.keys(json[0]);
+			var csv = json.map(function(row){
+			  return fields.map(function(fieldName){
+			    return JSON.stringify(row[fieldName] || '');
+			  });
+			});
+			csv.unshift(fields);
+			console.log(csv);
+		}
+
+
+		$(document).ready(function(){
+			load_tweets('Data Science');
+		});
+
+		$('#search').click(function(){
+			$('#loading').html('Loading...');
+			$('#tweets').html('');
+			load_tweets($('#query').val());
 		});
 
 	</script>

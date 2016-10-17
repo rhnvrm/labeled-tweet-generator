@@ -1,8 +1,14 @@
-# Kayako Twitter Challenge
+# Tweet Sentiment Labeller
 
-Twitter API client that fetches tweets having custserv hashtag and that have been retweeted at least once.
+Search for Tweets and download the data labeled with it's Polarity in CSV format
 
-[View Live https://kayako-rhnvrm.herokuapp.com/](https://kayako-rhnvrm.herokuapp.com/)
+View Live at [https://twitter-sentiment-csv.herokuapp.com/](https://twitter-sentiment-csv.herokuapp.com/)
+
+## Screencast
+
+Click to view the full screencast.
+
+[![](https://zippy.gfycat.com/EvenUnknownDrake.gif)](https://zippy.gfycat.com/EvenUnknownDrake.gif)
 
 ## Development Guide
 

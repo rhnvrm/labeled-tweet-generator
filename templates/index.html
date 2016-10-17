@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Kayako</title>
+	<title>Tweet Sentiment to CSV</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
@@ -10,8 +10,8 @@
 </head>
 <body>
 	<div class='container-fluid'>
-		<h1>Tweet Sentiment</h1>
-
+		<h1>Tweet Sentiment to CSV</h1>
+		<h5>Search for Tweets and download the data labeled with it's Polarity in CSV format</h3>
 		<div id="search_box" class="container-fluid">
 			<input type="text" id="query">
 			<button id="search">Search</button>
@@ -20,6 +20,9 @@
 			<div id="tweets"></div>
 		</div>	
 
+		<footer>
+			made by <a href="http://rohanverma.net">Rohan Verma</a>.
+		</footer>
 	</div>
 	<script type="text/javascript">
 
@@ -43,7 +46,7 @@
 			        var container = $('#tweets');
 			        var contents = '';
 			        for(i = 0; i < tweets.length; i++)
-			        	contents += '<p style="color:'+ sentiment_to_color(tweets[i].sentiment) +'">' + tweets[i].text + '</p>';
+			        	contents += '<p style="color:'+ sentiment_to_color(tweets[i].sentiment) +'">'+ tweets[i].user + ": " + tweets[i].text + '</p>';
 			        container.html(contents);
 			        $('#query').val(querystring);
 			        $('#loading').html(data['count'] + " Tweets loaded about "+ querystring +".");

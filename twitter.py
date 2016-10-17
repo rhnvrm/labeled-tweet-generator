@@ -60,13 +60,14 @@ class TwitterClient(object):
                 pass
             for tweet in recd_tweets:
                 parsed_tweet = {}
+
+                parsed_tweet['text'] = tweet.text
+                parsed_tweet['user'] = tweet.user.screen_name
+                
                 if self.with_sentiment == 1:
                     parsed_tweet['sentiment'] = self.get_tweet_sentiment(tweet.text)
                 else:
                     parsed_tweet['sentiment'] = 'unavailable'
-
-                parsed_tweet['text'] = tweet.text
-                parsed_tweet['user'] = tweet.user.screen_name
 
                 if tweet.retweet_count > 0 and self.retweets_only == 1:
                     if parsed_tweet not in tweets:

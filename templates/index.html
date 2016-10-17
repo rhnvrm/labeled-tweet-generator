@@ -15,12 +15,15 @@
 		<div id="search_box" class="container-fluid">
 			<input type="text" id="query">
 			<button id="search">Search</button>
+			<button id="getcsv">Download CSV</button>
 			<div id="loading">Loading...</div>
 			<div id="tweets"></div>
 		</div>	
 
 	</div>
 	<script type="text/javascript">
+
+	 var current_data;
 
 		function sentiment_to_color(sentiment){
 			if(sentiment == 'positive') return 'green';
@@ -35,7 +38,7 @@
 			    dataType: 'json',
 			    type: 'GET',
 			    success: function(data) {
-			    		console.log(data);
+			    		current_data = data['data'];
 			        var tweets = data['data'];
 			        var container = $('#tweets');
 			        var contents = '';
@@ -56,9 +59,21 @@
 			  });
 			});
 			csv.unshift(fields);
-			console.log(csv);
+			return csv.join('\r\n');
 		}
 
+		function download(filename, text) {
+		  var element = document.createElement('a');
+		  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+		  element.setAttribute('download', filename);
+
+		  element.style.display = 'none';
+		  document.body.appendChild(element);
+
+		  element.click();
+
+		  document.body.removeChild(element);
+		}
 
 		$(document).ready(function(){
 			load_tweets('Data Science');
@@ -68,6 +83,10 @@
 			$('#loading').html('Loading...');
 			$('#tweets').html('');
 			load_tweets($('#query').val());
+		});
+
+		$('#getcsv').click(function(){
+			download('data.csv', get_csv(current_data));
 		});
 
 	</script>

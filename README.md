@@ -10,7 +10,7 @@ Click to view the full screencast.
 
 [![](https://zippy.gfycat.com/EvenUnknownDrake.gif)](https://gfycat.com/EvenUnknownDrake)
 *Pie Chart : 
-[Imgur](http://i.imgur.com/CdGv3pH.png)
+[![](http://i.imgur.com/CdGv3pH.png)](http://i.imgur.com/CdGv3pH.png)
 ## Development Guide
 
 1. Create a virtualenv. `virtualenv venv`

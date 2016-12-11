@@ -6,7 +6,8 @@
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/paper/bootstrap.min.css" rel="stylesheet" integrity="sha384-awusxf8AUojygHf2+joICySzB780jVvQaVCAt1clU3QsyAitLGul28Qxb2r1e5g+" crossorigin="anonymous">
-
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="https://code.highcharts.com/modules/exporting.js"></script>
 </head>
 <body>
 	<div class='container-fluid'>
@@ -17,21 +18,20 @@
 			<button id="search">Search</button>
 			<button id="getcsv">Download CSV</button>
 			<div id="loading">Loading...</div>
+			<div id="container" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
 			<div id="tweets"></div>
 		</div>	
-
 		<footer>
-			made by <a href="http://rohanverma.net">Rohan Verma</a>.
-		</footer>
-	</div>
+			credit to <a href="http://rohanverma.net">Rohan Verma</a>.
+		</footer>	</div>
 	<script type="text/javascript">
 
 	 var current_data;
 
 		function sentiment_to_color(sentiment){
-			if(sentiment == 'positive') return 'green';
-			else if(sentiment == 'negative') return 'red';
-			else return 'grey';
+			if(sentiment == 'positive') return 'panel-success';
+			else if(sentiment == 'negative') return 'panel-danger';
+			else return 'panel-primary';
 		}
 
 		function load_tweets(querystring){
@@ -41,12 +41,19 @@
 			    dataType: 'json',
 			    type: 'GET',
 			    success: function(data) {
-			    		current_data = data['data'];
+			    	buildChart(data);
+			    	current_data = data['data'];
 			        var tweets = data['data'];
 			        var container = $('#tweets');
 			        var contents = '';
-			        for(i = 0; i < tweets.length; i++)
-			        	contents += '<p style="color:'+ sentiment_to_color(tweets[i].sentiment) +'">'+ tweets[i].user + ": " + tweets[i].text + '</p>';
+			        contents+='<div>'
+			        
+			        for(i = 0; i < tweets.length; i++){
+			        	contents+= '<div class="panel '+ sentiment_to_color(tweets[i].sentiment) +'"> <div class="panel-heading"> <h3 class="panel-title">'+ tweets[i].user +'</h3> </div> <div class="panel-body"><blockquote>'+ tweets[i].text + '</blockquote> </div> </div>'
+                        // contents += '<li class="list-group-item '+ sentiment_to_color(tweets[i].sentiment) +'">'+ tweets[i].user + ": " + tweets[i].text + '</li>';
+			        }
+                    
+                    contents+='</div>';
 			        container.html(contents);
 			        $('#query').val(querystring);
 			        $('#loading').html(data['count'] + " Tweets loaded about "+ querystring +".");
@@ -91,6 +98,91 @@
 		$('#getcsv').click(function(){
 			download('data.csv', get_csv(current_data));
 		});
+	function buildChart(data) {
+    Highcharts.chart('container', {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+        },
+        title: {
+            text: 'last 100 tweets on '+$('#query').val()
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                }
+            }
+        },
+        series: getPercentage(data)
+    });
+}; 
+function getNegativePercentage(data) {
+	var current_data = data['data'];
+	var counter = 0 ;
+	for (var i = current_data.length - 1; i >= 0; i--) {
+		if(current_data[i].sentiment == 'negative') 
+			counter ++;
+	}
+		console.log('negative',counter)
+
+	return counter/data.count;
+}
+function getPositivePercentage(data) {
+	var current_data = data['data'];
+	var counter = 0 ;
+	for (var i = current_data.length - 1; i >= 0; i--) {
+		if(current_data[i].sentiment == 'positive') 
+			counter ++;
+	}
+		console.log('positive',counter)
+
+	return counter/data.count;
+}
+function getNeutralPercentage(data) {
+	var current_data = data['data'];
+	var counter = 0 ;
+	for (var i = current_data.length - 1; i >= 0; i--) {
+		if(current_data[i].sentiment == 'neutral') 
+			counter ++;
+	}
+	console.log('neutral',counter)
+	return counter/data.count;
+}
+function getPercentage(data) {
+	var neutral = getNeutralPercentage(data);
+	var positive = getPositivePercentage(data);
+	var negative = getNegativePercentage(data);
+
+	return [{
+            name: 'Tweets',
+            //colorByPoint: true,
+            data: [{
+                name: 'Positive',
+                y: positive
+            }, {
+                name: 'Negative',
+                y: negative,
+                sliced: true,
+                selected: true
+            }, {
+                name: 'Neutral',
+                y: neutral
+            }]
+        }]
+	// body...
+}
 
 	</script>
 </body>

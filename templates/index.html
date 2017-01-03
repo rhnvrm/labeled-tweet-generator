@@ -11,18 +11,22 @@
 </head>
 <body>
 	<div class='container-fluid'>
-		<h1>Tweet Sentiment to CSV</h1>
-		<h5>Search for Tweets and download the data labeled with it's Polarity in CSV format</h3>
-		<div id="search_box" class="container-fluid">
-			<input type="text" id="query">
-			<button id="search">Search</button>
-			<button id="getcsv">Download CSV</button>
-			<div id="loading">Loading...</div>
-			<div id="container" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
-			<div id="tweets"></div>
-		</div>	
-		<footer>
-			credit to <a href="http://rohanverma.net">Rohan Verma</a>.
+		<div class='text-center'>
+			<h1>Tweet Sentiment to CSV</h1>
+			<h5>Search for Tweets and download the data labeled with it's Polarity in CSV format</h5>
+			
+			<div id="search_box" class="container-fluid">
+				<input type="text" id="query">
+				<button id="search">Search</button>
+				<button id="getcsv">Download CSV</button>
+				<div id="loading">Loading...</div>
+				<div id="container" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+				
+			</div>	
+		</div>
+		<div id="tweets"></div>
+		<footer class="text-center">
+			Made with ❤ | <a href="https://github.com/rhnvrm/labeled-tweet-generator">Github</a> | <a href="http://rohanverma.net">Rohan Verma</a>
 		</footer>	</div>
 	<script type="text/javascript">
 

@@ -4,13 +4,9 @@ Search for Tweets and download the data labeled with it's Polarity in CSV format
 
 View Live at [https://twitter-sentiment-csv.herokuapp.com/](https://twitter-sentiment-csv.herokuapp.com/)
 
-## Screencast
+[![](http://i.imgur.com/H78FZUX.png)](http://i.imgur.com/H78FZUX.png)
 
-Click to view the full screencast.
 
-[![](https://zippy.gfycat.com/EvenUnknownDrake.gif)](https://gfycat.com/EvenUnknownDrake)
-*Pie Chart : 
-[![](http://i.imgur.com/CdGv3pH.png)](http://i.imgur.com/CdGv3pH.png)
 ## Development Guide
 
 1. Create a virtualenv. `virtualenv venv`
@@ -26,4 +22,4 @@ https://www.youtube.com/watch?v=o_OZdbCzHUA
 And was featured in the next video in the series:
 https://www.youtube.com/watch?v=9gBC9R-msAk
 
-## License MIT © Rohan Verma
+## [License MIT © Rohan Verma](https://rhnvrm.mit-license.org/)
